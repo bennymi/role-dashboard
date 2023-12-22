@@ -1,0 +1,12 @@
+:root {
+    --color-primary: 46, 46, 255; /* #2e2eff */
+    --color-on-primary: 255, 255, 255; /* #fff */
+
+    --color-secondary: 76, 184, 230; /* #4cb8e6 */
+    --color-on-secondary: 0, 0, 0; /* #000 */
+
+    --color-popover-surface: 38, 38, 38; /* #262626 */
+    --color-on-popover-surface: 255, 255, 255; /* #fff */
+
+    --color-error: 175, 18, 18; /* #af1212 */
+}

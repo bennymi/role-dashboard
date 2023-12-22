@@ -1,90 +1,92 @@
 <script lang="ts">
-	import type { Permission, Role, RoleService } from './types';
+	import { onMount } from 'svelte';
 
-	const demoRoles: Role[] = [
-		{
-			id: '9faaf9ba-464e-4c68-a901-630fc4de123b',
-			name: 'User',
-			permissions: []
-		},
-		{
-			id: '346a3cce-49d4-4e3c-bade-a16ed44b98bb',
-			name: 'Administrator',
-			permissions: []
-		},
-		{
-			id: '6f25f789-72f3-41e2-9561-b30ca19aa225',
-			name: 'Auditor',
-			permissions: []
-		}
-	];
+	import { PermissionDialog, PermissionIcon, Toaster } from '$lib';
+	import type { Permission, PermissionIcons, Role } from '$lib/types';
+	import { MockRoleService } from '.';
 
-	const demoPermissions: Permission[] = [
-		{
-			id: '706ee8e3-6034-4f27-ab20-4397ad874a09',
-			name: 'Read Data'
-		},
-		{
-			id: '72e1c7be-4c2f-4ed1-bc7b-41519b35e429',
-			name: 'Write Data'
-		},
-		{
-			id: '3add53a6-ede2-4760-8942-dbd08d209d2c',
-			name: 'Delete Data'
-		}
-	];
+	let service = new MockRoleService();
+	let roles: Role[] = [];
+	let permissions: Permission[] = [];
+	let error = '';
+	let init = false;
+	let toaster: Toaster;
 
-	const randomTimeout = (): number => {
-		const max = 1000;
-		const min = 200;
-		return Math.random() * (max - min) + min;
+	const icons: PermissionIcons = {
+		read: 'i-material-symbols-visibility-rounded',
+		write: 'i-material-symbols-edit-rounded',
+		delete: 'i-material-symbols-delete-rounded'
 	};
 
-	const delayedRandomlyRejectingPromise = <T,>(handler: () => T) => {
-		return new Promise<T>((resolve, reject) => {
-			setTimeout(() => {
-				if (Math.random() > 0.75) {
-					return reject(new Error('random error'));
-				}
-				try {
-					resolve(handler());
-				} catch (error) {
-					reject(error);
-				}
-			}, randomTimeout());
-		});
-	};
+	onMount(async () => {
+		const errorMessage =
+			'Error: Failed to fetch roles or permissions. Please try again or open a support ticket.';
 
-	export class MockRoleService implements RoleService {
-		private readonly roleState: Role[] = [...demoRoles];
-		private readonly permissionState: Permission[] = [...demoPermissions];
-
-		getRoles(): Promise<Role[]> {
-			return delayedRandomlyRejectingPromise(() => [...this.roleState]);
+		try {
+			roles = await service.getRoles();
+		} catch (e) {
+			error = errorMessage;
 		}
 
-		getPermissions(): Promise<Permission[]> {
-			return delayedRandomlyRejectingPromise(() => [...this.permissionState]);
+		try {
+			permissions = await service.getPermissions();
+		} catch (e) {
+			error = errorMessage;
 		}
 
-		setPermissionsForRole(roleId: string, permissions: Permission[]): Promise<Role> {
-			return delayedRandomlyRejectingPromise(() => {
-				const toUpdateRoleIndex = this.roleState.findIndex((r) => r.id === roleId);
-				if (toUpdateRoleIndex < 0) {
-					throw new Error('role not found');
+		init = true;
+	});
+
+	async function updateRolePermissions(role: Role, updatedPermissions: Permission[]) {
+		try {
+			const newRole = await service.setPermissionsForRole(role.id, updatedPermissions);
+
+			roles = roles.map((role) => {
+				if (role.id != newRole.id) {
+					return role;
 				}
-				const permissionIdsAreValid = permissions.every(
-					(permission) => this.permissionState.findIndex((p) => p.id === permission.id) > -1
-				);
-				if (!permissionIdsAreValid) {
-					throw new Error('invalid permissions');
-				}
-				this.roleState[toUpdateRoleIndex] = {
-					...this.roleState[toUpdateRoleIndex],
-					permissions
-				};
-				return this.roleState[toUpdateRoleIndex];
+
+				return newRole;
 			});
+
+			toaster.addNewToast('Success', `Permissions were updated for the ${role.name} role.`);
+		} catch (e) {
+			toaster.addNewToast(
+				'Error',
+				`An error occurred. Permissions couldn't be updated. Please try again or create a support ticket.`
+			);
 		}
 	}
 </script>
+
+<h2 class="text-center font-bold text-2xl mt-20 mb-6">Roles & Permissions</h2>
+
+{#if error}
+	<div class="text-white bg-error rounded-md px-2 py-1 w-fit font-semibold m-auto">{error}</div>
+{:else if init}
+	<div class="m-auto w-[320px] flex flex-col">
+		{#each roles as role (role.id)}
+			<div class="py-1 px-1 flex justify-between gap-4 border-b border-popover-surface/30">
+				<div class="flex gap-2">
+					<PermissionDialog
+						{role}
+						{permissions}
+						on:save={(e) => updateRolePermissions(role, e.detail)}
+					/>
+
+					<div class="font-semibold min-w-40 py-1">{role.name}</div>
+				</div>
+
+				<div class="flex gap-2 items-end justify-center">
+					{#each permissions as permission}
+						{@const active = role.permissions.some((v) => v.id === permission.id)}
+
+						<PermissionIcon {permission} {active} icon={icons[permission.type]} />
+					{/each}
+				</div>
+			</div>
+		{/each}
+	</div>
+{/if}
+
+<Toaster bind:this={toaster} />
