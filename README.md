@@ -31,13 +31,13 @@ Components were built with [melt-ui](https://melt-ui.com/) to ensure high-qualit
 ## Screenshots
 
 When an error occurs while trying to fetch permissions and roles:
-[failed to fetch error](static/failed-to-fetch-error.png)
+![failed to fetch error](static/failed-to-fetch-error.png)
 
 A tooltip appears when hovering a permission icon:
-[permission tooltip](static/permission-tooltip.png)
+![permission tooltip](static/permission-tooltip.png)
 
 A toast message appears when permissions have been adjusted for a role:
-[toast message](static/success-toast-message.png)
+![toast message](static/success-toast-message.png)
 
 ## Problem Statement
 
