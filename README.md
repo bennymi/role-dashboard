@@ -2,7 +2,10 @@
 
 ## Setting up the project
 
-Install the dependencies with `pnpm install` and start the development server:
+I used [pnpm](https://pnpm.io/) since it is more efficient than npm. You can install it with npm: `npm install -g pnpm`.
+
+
+Install the project dependencies with `pnpm install` and start the development server:
 
 ```bash
 pnpm run dev
@@ -20,7 +23,7 @@ You can preview the production build with `pnpm run preview`.
 
 ## Used Libraries
 
-Components were built with [melt-ui](https://melt-ui.com/) to ensure high-quality accessible behaviour that follows WAI-ARIA guidelines. For the styling I used [UnoCSS](https://github.com/unocss/unocss) with the [Wind preset](https://unocss.dev/presets/wind), which allows us to use TailwindCSS and WindiCSS atomic CSS classes. Additionally we can implement icons as simple CSS classes with the [icon preset](https://unocss.dev/presets/icons). 
+I used [Svelte](https://svelte.dev/) + [SvelteKit](https://kit.svelte.dev/) for development. Components were built with [melt-ui](https://melt-ui.com/) to ensure high-quality accessible behaviour that follows WAI-ARIA guidelines. For the styling I used [UnoCSS](https://github.com/unocss/unocss) with the [Wind preset](https://unocss.dev/presets/wind), which allows us to use TailwindCSS and WindiCSS atomic CSS classes. Additionally we can implement icons as simple CSS classes with the [icon preset](https://unocss.dev/presets/icons). 
 
 ## Project Structure
 
@@ -30,26 +33,29 @@ Components were built with [melt-ui](https://melt-ui.com/) to ensure high-qualit
 
 ## Screenshots
 
-When an error occurs while trying to fetch permissions and roles:
+An error message gets displayed when an error occurs while trying to fetch permissions and roles:
 
 
 ![failed to fetch error](static/failed-to-fetch-error.png)
+
 
 A tooltip appears when hovering a permission icon:
 
 
 ![permission tooltip](static/permission-tooltip.png)
 
-A dialog opens when editing role permissions. The role is referenced and each of the permissions can be turned on or off:
+
+A dialog opens when editing role permissions. The role is referenced in the title and each of the permissions can be turned on or off using switches:
 
 
 ![dialog](static/dialog.png)
 
 
-A toast message appears when permissions have been adjusted for a role:
+A toast message appears, giving feedback when permissions have been adjusted for a role:
 
 
 ![toast message](static/success-toast-message.png)
+
 
 ## Problem Statement
 
