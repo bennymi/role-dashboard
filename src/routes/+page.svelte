@@ -18,6 +18,9 @@
 		delete: 'i-material-symbols-delete-rounded'
 	};
 
+	/**
+	 * Fetch roles and permissions when the page is loaded and set an error message if their is an error.
+	 */
 	onMount(async () => {
 		const errorMessage =
 			'Error: Failed to fetch roles or permissions. Please try again or open a support ticket.';
@@ -37,6 +40,13 @@
 		init = true;
 	});
 
+	/**
+	 * This function is used to update the permissions of a role. A toast message is created
+	 * to show whether the action was successful or if an error occurred.
+	 *
+	 * @param role - The role that is being updated.
+	 * @param updatedPermissions - The new set of permissions that the role has access to.
+	 */
 	async function updateRolePermissions(role: Role, updatedPermissions: Permission[]) {
 		try {
 			const newRole = await service.setPermissionsForRole(role.id, updatedPermissions);

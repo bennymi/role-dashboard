@@ -16,6 +16,10 @@
 
 	let newPermissions: PermissionActive[];
 
+	/**
+	 * Maps the current active state of each permission for a role, and adds
+	 * it as a separate 'active' attribute.
+	 */
 	const getPermissionActiveStates = () =>
 		permissions.map((permission) => {
 			const active = role.permissions.some((v) => v.id === permission.id);
@@ -30,6 +34,7 @@
 		newPermissions = getPermissionActiveStates();
 	});
 
+	// Create a dialog melt component.
 	const {
 		elements: { trigger, overlay, content, title, description, close },
 		states: { open }
@@ -37,6 +42,10 @@
 		forceVisible: true
 	});
 
+	/**
+	 * Dispatch a 'save' event when the save button is clicked.
+	 * @param e - The event emitted by melt-ui.
+	 */
 	const handleSave: MeltEventHandler<MouseEvent | KeyboardEvent> = (e) => {
 		if (e.detail.originalEvent instanceof KeyboardEvent && e.detail.originalEvent.key != 'Enter') {
 			return;
@@ -47,6 +56,7 @@
 		dispatcher('save', updated);
 	};
 
+	// Rerun the getPermissionActiveStates() every time the dialog is opened.
 	$: if ($open) {
 		newPermissions = getPermissionActiveStates();
 	}

@@ -16,6 +16,11 @@
 		Error: 'bg-red-500'
 	};
 
+	/**
+	 * Define an outwards facing function with which new toasts can be added.
+	 * @param type
+	 * @param description
+	 */
 	export function addNewToast(type: ToastType, description: string) {
 		addToast({
 			data: {

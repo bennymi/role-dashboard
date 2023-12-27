@@ -20,6 +20,9 @@
 		value: percentage
 	});
 
+	/**
+	 * Update percentage based on the toast percentage.
+	 */
 	onMount(() => {
 		let frame: number;
 		const updatePercentage = () => {

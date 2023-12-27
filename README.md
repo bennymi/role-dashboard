@@ -21,6 +21,11 @@ pnpm run build
 
 You can preview the production build with `pnpm run preview`.
 
+## Recommended VSCode extensions
+- [Svelte for VSCode](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode)
+- [UnoCSS](https://marketplace.visualstudio.com/items?itemName=antfu.unocss): To see which CSS classes are applied by the UnoCSS presets and to get intellisense.
+- [Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify): To be able to see iconify icons inside VSCode.
+
 ## Used Libraries
 
 I used [Svelte](https://svelte.dev/) + [SvelteKit](https://kit.svelte.dev/) for development. Components were built with [melt-ui](https://melt-ui.com/) to ensure high-quality accessible behaviour that follows WAI-ARIA guidelines. For the styling I used [UnoCSS](https://github.com/unocss/unocss) with the [Wind preset](https://unocss.dev/presets/wind), which allows us to use TailwindCSS and WindiCSS atomic CSS classes. Additionally we can implement icons as simple CSS classes with the [icon preset](https://unocss.dev/presets/icons). 
